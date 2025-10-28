@@ -1,46 +1,33 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createAuthor } from "../../../_services/authors";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createGenre } from '../../../_services/genres';
 
-function CreateAuthors() {
+function CreateGenres() {
     const [formData, setFormData] = useState({
-        name: "",
-        bio: "",
-        photo: null,
+        name: '',
+        description: '',
     });
 
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === "photo") {
-            setFormData({
-                ...formData,
-                photo: files[0],
-            });
-        } else {
-            setFormData({
-                ...formData,
-                [name]: value,
-            });
-        }
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const payload = new FormData();
-            for (const key in formData) {
-                payload.append(key, formData[key]);
-            }
-
-            await createAuthor(payload);
-            alert("Author successfully created!");
-            navigate("/admin/authors");
+            await createGenre(formData);
+            alert('Genre successfully created!');
+            navigate('/admin/genres');
         } catch (error) {
-            console.error("Error creating author:", error);
-            alert("Failed to create author!");
+            console.error('Error creating genre:', error);
+            alert('Failed to create genre!');
         }
     };
 
@@ -48,17 +35,16 @@ function CreateAuthors() {
         <section className="bg-white dark:bg-gray-900 min-h-screen">
             <div className="max-w-3xl px-6 py-10 mx-auto lg:py-16">
                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
-                    Create New Author
+                    Create New Genre
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Name */}
                     <div>
                         <label
                             htmlFor="name"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
-                            Author Name
+                            Genre Name
                         </label>
                         <input
                             type="text"
@@ -66,7 +52,7 @@ function CreateAuthors() {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="Enter author name"
+                            placeholder="Enter genre name"
                             required
                             className="w-full p-2.5 text-sm border border-gray-300 rounded-lg bg-gray-50 
                             focus:ring-indigo-600 focus:border-indigo-600 dark:bg-gray-700 
@@ -74,58 +60,37 @@ function CreateAuthors() {
                         />
                     </div>
 
-                    {/* Bio */}
                     <div>
                         <label
-                            htmlFor="bio"
+                            htmlFor="description"
                             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                         >
-                            Bio
+                            Description
                         </label>
                         <textarea
-                            id="bio"
-                            name="bio"
-                            value={formData.bio}
+                            id="description"
+                            name="description"
+                            value={formData.description}
                             onChange={handleChange}
                             rows="5"
-                            placeholder="Enter author's biography (optional)"
+                            placeholder="Enter description (optional)"
                             className="w-full p-2.5 text-sm border border-gray-300 rounded-lg bg-gray-50 
                             focus:ring-indigo-600 focus:border-indigo-600 dark:bg-gray-700 
                             dark:border-gray-600 dark:text-white"
                         ></textarea>
                     </div>
 
-                    {/* Photo */}
-                    <div>
-                        <label
-                            htmlFor="photo"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Photo
-                        </label>
-                        <input
-                            type="file"
-                            id="photo"
-                            name="photo"
-                            accept="image/*"
-                            onChange={handleChange}
-                            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-indigo-600 focus:border-indigo-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            required
-                        />
-                    </div>
-
-                    {/* Buttons */}
                     <div className="flex items-center gap-4">
                         <button
                             type="submit"
                             className="px-5 py-2.5 text-sm font-medium text-white bg-indigo-700 
                             rounded-lg hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300"
                         >
-                            Save Author
+                            Save Genre
                         </button>
                         <button
                             type="button"
-                            onClick={() => navigate("/admin/authors")}
+                            onClick={() => navigate('/admin/genres')}
                             className="px-5 py-2.5 text-sm font-medium text-red-600 border border-red-600 
                             rounded-lg hover:text-white hover:bg-red-600 focus:ring-4 focus:ring-red-300"
                         >
@@ -138,4 +103,4 @@ function CreateAuthors() {
     );
 }
 
-export default CreateAuthors;
+export default CreateGenres;

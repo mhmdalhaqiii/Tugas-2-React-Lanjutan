@@ -1,16 +1,40 @@
-import API from "../_api";
+import {API} from "../_api"
 
-    export const getAuthor = async () => {
-    const { data } = await API.get("/authors");
+export const getAuthors = async () => {
+    const { data } = await API.get("/authors")
     return data.data;
-    };
+}
 
-    export const CreateAuthor = async (data) => {
+export const createAuthor = async (data) => {
     try {
-        const response = await API.post("/authors", data);
-        return response.data;
+        const response = await API.post("/authors", data)
+        return response.data
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.log(error);
+        throw error
     }
-    };
+}
+
+export const showAuthor = async (id) => {
+    const { data } = await API.get(`/authors/${id}`);
+    return data.data;
+};
+
+export const updateAuthor = async (id, data) => {
+  try {
+    const response = await API.post(`/authors/${id}`, data)
+    return response.data
+  } catch (error) {
+    console.log(error);
+    throw error
+  }
+}
+
+export const deleteAuthor = async (id) => {
+  try {
+    await API.delete(`/authors/${id}`)
+  } catch (error) {
+    console.log(error);
+    throw error
+  }
+}

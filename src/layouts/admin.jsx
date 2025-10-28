@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export default function AdminLayout() {
   return (
@@ -41,10 +41,7 @@ export default function AdminLayout() {
                 </svg>
                 <span className="sr-only">Toggle sidebar</span>
               </button>
-              <a
-                href="https://flowbite.com"
-                className="flex items-center justify-between mr-4"
-              >
+              <Link to={"/admin"} className="flex items-center justify-between mr-4">
                 <img
                   src="https://flowbite.s3.amazonaws.com/logo.svg"
                   className="mr-3 h-8"
@@ -53,7 +50,7 @@ export default function AdminLayout() {
                 <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                   Flowbite
                 </span>
-              </a>
+                </Link>
             </div>
             <div className="flex items-center lg:order-2">
               <button
@@ -110,12 +107,9 @@ export default function AdminLayout() {
                   aria-labelledby="dropdown"
                 >
                   <li>
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
+                    <Link to={"#"} className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                       Sign out
-                    </a>
+                      </Link>
                   </li>
                 </ul>
               </div>
@@ -133,10 +127,7 @@ export default function AdminLayout() {
           <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
             <ul className="space-y-2">
               <li>
-                <a
-                  href="admin"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                >
+                <Link to={"admin"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                   <svg
                     aria-hidden="true"
                     className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -148,12 +139,10 @@ export default function AdminLayout() {
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                   </svg>
                   <span className="ml-3">Overview</span>
-                </a>
+                  </Link>
               </li>
               <li>
-                <a
-                  href="/admin/users"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                <Link to={"/admin/users"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
                 >
                   <svg
                     aria-hidden="true"
@@ -170,12 +159,10 @@ export default function AdminLayout() {
                     ></path>
                   </svg>
                   <span className="ml-3">Users</span>
-                </a>
+                  </Link>
               </li>
               <li>
-                <a
-                  href="/admin/authors"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
+                <Link to={"/admin/authors"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
                 >
                   <svg
                     aria-hidden="true"
@@ -192,13 +179,10 @@ export default function AdminLayout() {
                     ></path>
                   </svg>
                   <span className="ml-3">Authors</span>
-                </a>
+                  </Link>
               </li>
               <li>
-                <a
-                  href="/admin/genres"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-                >
+                <Link to={"/admin/genres"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
                   <svg
                     aria-hidden="true"
                     className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -214,17 +198,14 @@ export default function AdminLayout() {
                     ></path>
                   </svg>
                   <span className="ml-3">Genres</span>
-                </a>
+                  </Link>
               </li>
             </ul>
 
             <ul className="pt-5 mt-5 space-y-2 borderT border-gray-200 dark:border-gray-700">
               <li>
-                <a
-                  href="/admin/books"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-                >
-                  <svg
+                <Link to={"/admin/books"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+                    <svg
                     aria-hidden="true"
                     className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                     fill="currentColor"
@@ -239,13 +220,10 @@ export default function AdminLayout() {
                     ></path>
                   </svg>
                   <span className="ml-3">Books</span>
-                </a>
+                  </Link>
               </li>
               <li>
-                <a
-                  href="/admin/transactions"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-                >
+              <Link to={"/admin/transactions"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
                   <svg
                     aria-hidden="true"
                     className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
@@ -260,13 +238,10 @@ export default function AdminLayout() {
                     ></path>
                   </svg>
                   <span className="ml-3">Transaction</span>
-                </a>
+                  </Link>
               </li>
               <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-                >
+              <Link to={"#"} className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
                   <svg
                     aria-hidden="true"
                     className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -281,7 +256,7 @@ export default function AdminLayout() {
                     ></path>
                   </svg>
                   <span className="ml-3">Help</span>
-                </a>
+                  </Link>
               </li>
             </ul>
           </div>

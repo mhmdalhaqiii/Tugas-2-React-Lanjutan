@@ -2,57 +2,52 @@ import { useEffect, useState } from "react";
 import { deleteBook, getBooks } from "../../../_services/books";
 import { getGenres } from "../../../_services/genres";
 import { Link } from "react-router-dom";
-import { getAuthor } from "../../../_services/authors";
-
+import { getAuthors } from "../../../_services/authors";
 
 export default function AdminBooks() {
+  const [books, setBooks] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [authors, setAuthors] = useState([]);
 
-  const [books,setBooks]= useState([]);
-  const [genres,setGenres]= useState([]);
-  const [authors,setAuthors]= useState([]);
-  
-
-  const[openDropdownId, setOpenDropdownId] = useState(null);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () =>{
-      const [booksData,genresData, authorsData] = await Promise.all([
-        getBooks(),
-        getGenres(),
-        getAuthor(),
-      ])
-
-      setBooks(booksData)
-      setGenres(genresData)
-      setAuthors(authorsData)
-
-    }
-
-    fetchData()
-},[])
-
+    const fetchData = async () => {
+      try {
+        const [booksResponse, genresResponse, authorsResponse] = await Promise.all([getBooks(), getGenres(), getAuthors()]);
+        setBooks(booksResponse);
+        setGenres(genresResponse);
+        setAuthors(authorsResponse);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   const getGenreName = (id) => {
-    const genre = genres.find((genre) => genre.id === id);
-    return genre ? genre.name : "Unknow Genre";
-}
+    const genre = genres.find((genre) => genre.id === id)
+    return genre ? genre.name : "Unknown Genre"
+  }
 
- const getAuthorName = (id) => {
-    const author = authors.find((author) => author.id === id);
-    return author ? author.name : "Unknow Author";
-}
+  const getAuthorName = (id) => {
+    const author = authors.find((author) => author.id === id)
+    return author ? author.name : "Unknown Author"
+  }
+  
+  const toggleDropdown = (id) => {
+    setOpenDropdownId (openDropdownId === id ? null : id)
+  }
 
-    const toggleDropdown = (id) => {
-      setOpenDropdownId(openDropdownId === id ? null : id)
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this book?");
+
+    if (confirmDelete) {
+      await deleteBook(id);
+      setBooks(books.filter((book) => book.id !== id));
     }
-
-    const handleDelete = async (id) => {
-      const confirmDelete = window.confirm("Apakah kamu yakin mau menghapus buku ini?");
-      if (confirmDelete) {
-        await deleteBook(id);
-        setBooks(books.filter((book)=> book.id !== id));
-      }
-    }
+  }
 
   return (
     <>
@@ -91,12 +86,7 @@ export default function AdminBooks() {
                 </form>
               </div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                <Link 
-                  to={"/admin/books/create"}
-                 className="flex items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800"
-                >
-                
-
+                <Link to={"/admin/books/create"} className="flex items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
                   <svg
                     className="h-3.5 w-3.5 mr-2"
                     fill="currentColor"
@@ -111,7 +101,7 @@ export default function AdminBooks() {
                     />
                   </svg>
                   Add product
-                </Link>
+                  </Link>
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -133,7 +123,7 @@ export default function AdminBooks() {
                     <th scope="col" className="px-4 py-3">
                       Genre
                     </th>
-                     <th scope="col" className="px-4 py-3">
+                    <th scope="col" className="px-4 py-3">
                       Author
                     </th>
                     <th scope="col" className="px-4 py-3">
@@ -142,25 +132,24 @@ export default function AdminBooks() {
                   </tr>
                 </thead>
                 <tbody>
-
-                   {books.length > 0 ?
+                  
+                  { books.length > 0 ? 
                   books.map((book) => (
-
                   <tr key={book.id} className="border-b dark:border-gray-700">
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {book.title}
+                      { book. title }
                     </th>
-                    <td className="px-4 py-3">{book.price}</td>
-                    <td className="px-4 py-3">{book.stock}</td>
-                    <td className="px-4 py-3">{book.cover_photo}</td>
-                    <td className="px-4 py-3">{getGenreName(book.genre_id)}</td>
-                    <td className="px-4 py-3">{getAuthorName(book.author_id)}</td>
+                    <td className="px-4 py-3">{ book. price }</td>
+                    <td className="px-4 py-3">{ book. stock }</td>
+                    <td className="px-4 py-3">{ book. cover_photo }</td>
+                    <td className="px-4 py-3">{ getGenreName (book. genre_id) }</td>
+                    <td className="px-4 py-3">{ getAuthorName (book. author_id) }</td>
                     <td className="px-4 py-3 flex items-center justify-end relative">
                       <button
-                        id={'dropdown-button-$ {book.id'}
+                        id={`dropdown-button-${book.id}`}
                         onClick={() => toggleDropdown(book.id)}
                         className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                         type="button"
@@ -175,47 +164,42 @@ export default function AdminBooks() {
                           <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                         </svg>
                       </button>
+                      {openDropdownId === book.id && (
 
-                      {openDropdownId === book.id &&(
-
+                      
                       <div
                         id="apple-imac-27-dropdown"
-                        className="absolute right mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                        style={{top: "100%",right: "0"}}
+                        className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                        style={{ top : "100%", right: "0"}}
                       >
                         <ul
                           className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby="apple-imac-27-dropdown-button"
+                          aria-labelledby={`dropdown-button-${book.id}`}
                         >
                           <li>
-                            <Link
-                                to={`/admin/books/edit/${book.id}`}
-                                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 
-                                  dark:hover:text-white"
-                              >
-                                Edit
+                            <Link to={`/admin/books/edit/${book.id}`} 
+                            className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            Edit
                               </Link>
-                            </li>
-                          </ul>
-                          <div className="py-1">
-                            <button
-                              onClick={() => handleDelete(book.id)}
-                              className="block w-full text-left py-2 px-4 text-sm text-gray-700 
-                                hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 
-                                dark:hover:text-white"
-                            >
-                              Delete
-                            </button>
+                          </li>
+                        </ul>
+                        <div className="py-1">
+                          <button
+                          onClick={() => handleDelete(book.id)}
+                          className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                            Delete
+                          </button>
                         </div>
                       </div>
                       )}
                     </td>
                   </tr>
+                  
                   )) : (
-                  <p>Data tidak ditemukan</p>
+                    <p>Data tidak ditemukan</p>
                   )
-                  }
-
+                }
+                  
                 </tbody>
               </table>
             </div>
@@ -235,9 +219,9 @@ export default function AdminBooks() {
               </span>
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>
-                  <Link 
-                    to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  <a
+                    href="#"
+                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Previous</span>
                     <svg
@@ -253,47 +237,54 @@ export default function AdminBooks() {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  <a
+                    href="#"
+                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     1
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                 <Link to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  <a
+                    href="#"
+                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     2
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  <a
+                    href="#"
+                    aria-current="page"
+                    className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-indigo-600 bg-indigo-50 border border-indigo-300 hover:bg-indigo-100 hover:text-indigo-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
                   >
                     3
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  <a
+                    href="#"
+                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     ...
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                   >
+                  <a
+                    href="#"
+                    className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
                     100
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                   <Link to={'#'}
-                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                   >
+                  <a
+                    href="#"
+                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >
                     <span className="sr-only">Next</span>
                     <svg
                       className="w-5 h-5"
@@ -308,7 +299,7 @@ export default function AdminBooks() {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </nav>
